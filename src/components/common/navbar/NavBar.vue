@@ -13,6 +13,9 @@ export default {
   props:{
     navColor:{
       type: String
+    },
+    textColor: {
+      type: String
     }
   },
   data () {
@@ -23,8 +26,8 @@ export default {
   },
   computed:{
     isNavColor() {
-      return this.navColor? {backgroundColor: this.navColor} :{}
-    }
+      return this.navColor? {backgroundColor: this.navColor,color: this.textColor} :{}
+    },
   }
 }
 
@@ -37,6 +40,7 @@ export default {
     line-height: 44px;
     text-align: center;
     box-shadow: 0 1px 1px rgba(100, 100, 100, .1);
+    color: white;
   }
   .navColor{
     background-color: #ff8198;
