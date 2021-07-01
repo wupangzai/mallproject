@@ -8,6 +8,8 @@
         购物街
       </template>
     </nav-bar>
+    <!-- 滚动组件设置 -->
+    <scroll class="content">
     <!-- 轮播图 -->
     <home-swiper :banner='banner'></home-swiper>
     <!-- 推荐视图 -->
@@ -17,108 +19,7 @@
     <!-- tabControl -->
     <tab-control class="tab-control" :title="['流行', '新款', '精选']" @tabClick="tabClick"></tab-control>
     <good-list :goods="goods[tabType].list"></good-list>
-    <!-- <ul>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-    </ul> -->
+    </scroll>
   </div>
 </template>
 
@@ -130,6 +31,11 @@ import RecommendView from './childComponents/RecommendView.vue'
 import FeatureView from './childComponents/FeatureView.vue'
 import TabControl from '../../components/content/tabControl/TabControl.vue'
 import GoodList from '../../components/content/goods/GoodList.vue'
+import Scroll from '../../components/common/scroll/Scroll.vue'
+
+
+
+
 // 网络请求导入
 import {getHomeMultidata,getHomeGoods} from '@/network/home'
 
@@ -154,6 +60,7 @@ export default {
     FeatureView,
     TabControl,
     GoodList,
+    Scroll,
   },
   
   created() {
@@ -166,9 +73,12 @@ export default {
     this.getHomeGoods('pop')
     this.getHomeGoods('new')
     this.getHomeGoods('sell')
+  },
 
+  mounted() {
 
   },
+
   methods:{
     // 事件监听
     tabClick(index) {
@@ -203,7 +113,7 @@ export default {
       this.goods[type].list=this.goods[type].list.concat(res.data.list)
       // 将type里的页数+1
       this.goods[type].page += 1
-      console.log(res.data.list);
+      // console.log(res.data.list);
       })
     }
   }
@@ -213,7 +123,8 @@ export default {
 
 <style scoped>
   #home{
-    padding-top: 44px;
+    /* padding-top: 44px; */
+    height: 100vh;
   }
   .nav-bar{
     position: fixed;
@@ -227,4 +138,12 @@ export default {
     top: 44px;
     background-color: #fff;
   }
+  .content{
+    /* height: 470px; */
+    margin-top: 44px;
+    height: calc(100% - 93px);
+    overflow: hidden;
+  }
+
+
 </style>
