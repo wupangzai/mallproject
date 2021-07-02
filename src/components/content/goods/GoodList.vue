@@ -4,6 +4,7 @@
     <good-item v-for="(item, index) in goods" :key="index" :goodItem="item" class="item">
 
     </good-item>
+    <div>加载中...</div>
   </div>
 </template>
 

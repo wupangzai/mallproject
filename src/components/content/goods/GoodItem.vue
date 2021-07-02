@@ -1,7 +1,7 @@
 <!--  -->
 <template>
   <div class="goodItem">
-    <img :src="goodItem.show.img" alt="" >
+    <a :href="goodItem.link"><img :src="goodItem.show.img" alt="" @load="imgLoad"></a>
     <div class="goodInfo">
       <p>{{goodItem.title}}</p>
       <span class="price">{{goodItem.price}}</span>
@@ -24,6 +24,12 @@ export default {
     }
   },
   components:{
+  },
+  methods: {
+    imgLoad() {
+      // 事件总线
+      this.$bus.$emit('imgLoad')
+    }
   }
 }
 
