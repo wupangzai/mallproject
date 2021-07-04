@@ -4,7 +4,7 @@
     <swiper>
       <swiper-item v-for="(item, index) in banner" :key="index">
         <a :href="item.link">
-          <img :src="item.image">
+          <img :src="item.image" @load="imgload">
         </a>
       </swiper-item>
     </swiper>
@@ -24,7 +24,17 @@ export default {
   },
   data () {
     return {
-      
+      isLoad: false
+    }
+  },
+  methods:{
+    // 避免多次发送事件，导致执行多次获取offsettop
+    // 和防抖不一样的是，我只需要获取一次，防抖是间歇性获取
+    // 用一个变量记录发送
+    imgload() {
+      if(!this.isLoad)
+      this.$emit('swiperimgload')
+      this.isLoad = true
     }
   },
   components:{

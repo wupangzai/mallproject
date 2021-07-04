@@ -7,32 +7,56 @@ const Home = () => import('../views/home/Home')
 const Category = () => import('../views/category/Category')
 const Cart = () => import('../views/cart/Cart')
 const Profile = () => import('../views/profile/Profile')
+const Detail = () => import('../views/detail/Detail')
+
 
 
 const routes = [
   {
     path:'/',
-    redirect:'/home'
+    redirect:'/home',
+    meta: {
+      showTabBar: true
+    }
   },
 
   {
     path: '/home',
-    component: Home
+    component: Home,
+    meta: {
+      showTabBar: true
+    }
   },
 
   {
     path: '/category',
-    component: Category
+    component: Category,
+    meta: {
+      showTabBar: true
+    }
   },
 
   {
     path: '/cart',
-    component: Cart
+    component: Cart,
+    meta: {
+      showTabBar: true
+    }
   },
 
   {
     path: '/profile',
-    component: Profile
+    component: Profile,
+    meta: {
+      showTabBar: true
+    }
+  },
+  {
+    path: '/detail',
+    component: Detail,
+    meta: {
+      showTabBar: false
+    }
   }
 ]
 

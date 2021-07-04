@@ -1,7 +1,7 @@
 <!--  -->
 <template>
-  <div class="goodItem">
-    <a :href="goodItem.link"><img :src="goodItem.show.img" alt="" @load="imgLoad"></a>
+  <div class="goodItem" @click="itemClick">
+    <img :src="goodItem.show.img" alt="" @load="imgLoad">
     <div class="goodInfo">
       <p>{{goodItem.title}}</p>
       <span class="price">{{goodItem.price}}</span>
@@ -29,6 +29,15 @@ export default {
     imgLoad() {
       // 事件总线
       this.$bus.$emit('imgLoad')
+    },
+    itemClick() {
+      console.log('点击了item');
+      this.$router.push({
+        path: '/detail',
+        query:{
+          id: this.goodItem.iid
+        }
+      })
     }
   }
 }

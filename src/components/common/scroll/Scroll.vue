@@ -36,16 +36,19 @@ export default {
     },
     // 完成加载
     finishPullUp() {
+      setTimeout( () => {
       this.scroll.finishPullUp()
+
+      },3000)
     },
     // 图片刷新
     refresh() {
       this.scroll && this.scroll.refresh && this.scroll.refresh()
-        console.log('----');
-
     }
 
   },
+
+
   mounted() {
     // 不推荐使用wrapper，防止再其他组件有重复的类名
     // ref绑定再组件上，拿到的就是组件对象
@@ -55,13 +58,9 @@ export default {
       pullUpLoad: this.pullUpLoad,
       probeType: this.probeType,
     })
+    // 监听滚动底部
     this.scroll.on('pullingUp', () => {
-      console.log('触底事件');
       this.$emit('loadMore')
-      // 延迟触发，防止多次请求
-      setTimeout( () => {
-        this.scroll.finishPullUp()
-      },5000)
     })
     this.scroll.on('scroll', (position) => {    
     //  发送参数

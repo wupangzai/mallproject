@@ -8,16 +8,17 @@
         购物街
       </template>
     </nav-bar>
+    <tab-control :title="['流行', '新款', '精选']" @tabClick="tabClick" ref="tabControl1" v-show="isFix"></tab-control>
     <!-- 滚动组件设置 绑定ref方便获取滚动方法-->
     <scroll class="content" ref="scroll" :probeType = '3' :pullUpLoad="true" @scroll="scrollmove" @loadMore="loadmore">
     <!-- 轮播图 -->
-    <home-swiper :banner='banner'></home-swiper>
+    <home-swiper :banner='banner' @swiperimgload='swiperimgload'></home-swiper>
     <!-- 推荐视图 -->
     <recommend-view :recommend="recommend"></recommend-view>
     <!-- 本周精选 -->
     <feature-view></feature-view>
     <!-- tabControl -->
-    <tab-control class="tab-control" :title="['流行', '新款', '精选']" @tabClick="tabClick"></tab-control>
+    <tab-control  :title="['流行', '新款', '精选']" @tabClick="tabClick" ref="tabControl2" v-show="!isFix"></tab-control>
     <good-list :goods="goods[tabType].list"></good-list>
     </scroll>
     <back-top @click.native="backtop" v-show="backTopShow"></back-top>
@@ -35,8 +36,8 @@ import GoodList from '../../components/content/goods/GoodList.vue'
 import Scroll from '../../components/common/scroll/Scroll.vue'
 import BackTop from '../../components/content/backtop/BackTop.vue'
 
-
-
+// 公共方法类导入
+import {debounce} from '../../common/utils'
 
 
 // 网络请求导入
@@ -54,7 +55,9 @@ export default {
         'sell': {page: 0, list: []},
       },
       tabType: 'pop',
-      backTopShow:false
+      backTopShow: false,
+      tabOffsetTop: 0,
+      isFix: false
     }
   },
   components:{
@@ -83,11 +86,12 @@ export default {
 
   mounted() {
       // refresh解决better-scroll的高度问题，调用debounce函数
-      const refresh = this.debounce(this.$refs.scroll.refresh, 200)
+      const refresh = debounce(this.$refs.scroll.refresh, 200)
       this.$bus.$on('imgLoad', () => {
         refresh()
       }) 
-      
+
+
 
     
 
@@ -106,6 +110,8 @@ export default {
       else{
         this.tabType = 'sell'
       }
+      this.$refs.tabControl1.currentIndex = index 
+      this.$refs.tabControl2.currentIndex = index 
     },
     // backtop
     backtop() {
@@ -113,27 +119,23 @@ export default {
     },
     // 监听滚动参数
     scrollmove(position) {
+      // 判断回顶按钮是否显示
       if(position.y < -800)
       this.backTopShow = true
       if(position.y > -800){
         this.backTopShow = false
       }
+      // 判断tabcontrol是否吸顶参数
+      this.isFix = (-position.y) > this.tabOffsetTop
+
     },
     // 上拉加载更多
     loadmore() {
       this.getHomeGoods(this.tabType)
     },
-    // debounce防抖函数,将要执行的函数，传入debounce里，
-    // 在delay时间里，调用非常频繁的时候，就使用新生成的函数，
-    // 而新生成的 函数，不会非常频繁的调用，如果下一次执行的非常快，那么将上一次的取消掉
-    debounce(func, delay) {
-      let timer = null
-      return function(...args) {
-        if (timer)  clearTimeout(timer)
-        timer = setTimeout(() => {
-          func.apply(this, args)
-        }, delay)
-      }
+    // 监听轮播图图片是否加载完成
+    swiperimgload() {
+      this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop
     },
 
     // 网络请求
@@ -155,7 +157,6 @@ export default {
       this.goods[type].page += 1
       // console.log(res.data.list);
       this.$refs.scroll.finishPullUp()
-      // this.$refs.scroll.scroll.refresh()
       })
     },
 
@@ -177,21 +178,29 @@ export default {
     /* padding-top: 44px; */
     height: 100vh;
   }
-  .nav-bar{
-    position: fixed;
+  /* .nav-bar{ */
+    /* position: fixed;
     left: 0;
     right: 0;
-    top: 0;
-    z-index: 9;
-  }
-  .tab-control{
+    top: 0; */
+    /* z-index: 9; */
+  /* } */
+  /* .tab-control{
+    background-color: #fff;
     position: sticky;
     top: 44px;
-    background-color: #fff;
-  }
+  } */
+  /* .tabFix{
+    position: fixed;
+    top: 44px;
+    left: 0;
+    right: 0;
+    z-index: 99;
+
+  } */
   .content{
     /* height: 470px; */
-    margin-top: 44px;
+    /* margin-top: 44px; */
     height: calc(100% - 93px);
     overflow: hidden;
   }
