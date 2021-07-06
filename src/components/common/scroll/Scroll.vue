@@ -24,7 +24,8 @@ export default {
   },
   data () {
     return {
-      scroll: null
+      scroll: null,
+      positionY:0
     }
   },
   components:{
@@ -44,7 +45,8 @@ export default {
     // 图片刷新
     refresh() {
       this.scroll && this.scroll.refresh && this.scroll.refresh()
-    }
+    },
+  
 
   },
 
@@ -65,6 +67,7 @@ export default {
     this.scroll.on('scroll', (position) => {    
     //  发送参数
         this.scroll && this.$emit('scroll', position)
+        this.positionY = position.y
     })
   }
 }

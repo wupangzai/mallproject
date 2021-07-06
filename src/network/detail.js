@@ -1,5 +1,7 @@
 import {request} from '../network/request'
 
+
+// 详情数据请求
 export function getDetailData(iid) {
   return request({
     url: '/detail',
@@ -8,6 +10,15 @@ export function getDetailData(iid) {
     }
   })
 }
+
+// 推荐数据请求
+export function getRecommendDate(){
+  return request({
+    url: '/recommend'
+  })
+}
+
+
 
 // 导出类来进行数据保存
 // 商品相关信息
@@ -37,3 +48,24 @@ export class Shop{
   }
 }
 
+// 导出参数信息
+export class GoodsParam{
+  constructor(info, rule){
+    this.image = info.images ? info.images[0] :''
+    this.info = info.set
+    this.size = rule.tables
+
+  }
+}
+
+// 导出评论信息
+export class Comments{
+  constructor(user,content) {
+    this.username = user.uname
+    this.avatar = user.avatar
+    this.content = content.content
+    this.style = content.style
+    this.images = content.images
+    this.date = content.created
+  }
+}

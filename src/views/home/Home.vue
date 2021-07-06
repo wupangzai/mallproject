@@ -21,7 +21,8 @@
     <tab-control  :title="['流行', '新款', '精选']" @tabClick="tabClick" ref="tabControl2" v-show="!isFix"></tab-control>
     <good-list :goods="goods[tabType].list"></good-list>
     </scroll>
-    <back-top @click.native="backtop" v-show="backTopShow"></back-top>
+    <back-top @click.native="backTop" v-show="backTopShow"></back-top>
+    <!-- <back-top @click.native="backTop" v-show="backTopShow"></back-top> -->
   </div>
 </template>
 
@@ -38,7 +39,7 @@ import BackTop from '../../components/content/backtop/BackTop.vue'
 
 // 公共方法类导入
 import {debounce} from '../../common/utils'
-
+import {backTop} from '../../common/mixin'
 
 // 网络请求导入
 import {getHomeMultidata,getHomeGoods} from '@/network/home'
@@ -57,7 +58,8 @@ export default {
       tabType: 'pop',
       backTopShow: false,
       tabOffsetTop: 0,
-      isFix: false
+      isFix: false,
+      saveY: 0
     }
   },
   components:{
@@ -70,6 +72,8 @@ export default {
     Scroll,
     BackTop,
   },
+
+  mixins: [backTop],
   
   created() {
      // 请求多个数据
@@ -90,17 +94,21 @@ export default {
       this.$bus.$on('imgLoad', () => {
         refresh()
       }) 
-
-
-
-    
-
+  },
+  activated() {
+    // 再次回来的时候复位
+    this.$refs.scroll.scrollTo(0, this.saveY, 0)
+    // 回来时刷新滚动
+    this.$refs.scroll.refresh()
+  },
+  deactivated() {
+    // 离开时记录离开的位置
+    this.saveY = this.$refs.scroll.positionY
   },
 
   methods:{
     // 事件监听数据
     tabClick(index) {
-      console.log(index)
       if(index == 0){
         this.tabType = 'pop'
       }
@@ -113,10 +121,7 @@ export default {
       this.$refs.tabControl1.currentIndex = index 
       this.$refs.tabControl2.currentIndex = index 
     },
-    // backtop
-    backtop() {
-      this.$refs.scroll.scrollTo(0,0,500)
-    },
+
     // 监听滚动参数
     scrollmove(position) {
       // 判断回顶按钮是否显示
@@ -126,7 +131,7 @@ export default {
         this.backTopShow = false
       }
       // 判断tabcontrol是否吸顶参数
-      this.isFix = (-position.y) > this.tabOffsetTop
+      this.isFix = (-position.y) >= this.tabOffsetTop
 
     },
     // 上拉加载更多
@@ -204,6 +209,7 @@ export default {
     height: calc(100% - 93px);
     overflow: hidden;
   }
+
 
 
 </style>

@@ -38,7 +38,6 @@ export default {
     display: flex;
     text-align: center;
     font-size: 14px;
-    z-index: 9;
   }
   .item{
     flex: 1;

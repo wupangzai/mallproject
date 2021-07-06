@@ -118,7 +118,6 @@ export default {
   components:{
   },
   mounted() {
-    console.log(this.$route);
     // new BScroll(document.querySelector('.wrapper'))
     const scroll2 = scroll(document.querySelector('.wrapper'))
     scroll2.on('scroll', (position) => {
@@ -126,7 +125,6 @@ export default {
     })
     scroll2.on('pullingUp', () => {
       // 触底只能触发一次，必须调用finish,才能多次调用
-      console.log('up');
       scroll2.finishPullUp()
     })
   }

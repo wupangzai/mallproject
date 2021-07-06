@@ -1,7 +1,7 @@
 <!--  -->
 <template>
   <div class="goodItem" @click="itemClick">
-    <img :src="goodItem.show.img" alt="" @load="imgLoad">
+    <img :src="showImg" alt="" @load="imgLoad">
     <div class="goodInfo">
       <p>{{goodItem.title}}</p>
       <span class="price">{{goodItem.price}}</span>
@@ -28,16 +28,25 @@ export default {
   methods: {
     imgLoad() {
       // 事件总线
+      // 在不同的路由发送不同的事件
+      if(this.$route.path == '/home'){
       this.$bus.$emit('imgLoad')
+      }else if(this.$route.path == '/detail'){
+        this.$bus.$emit('detailload')
+      }
     },
     itemClick() {
-      console.log('点击了item');
       this.$router.push({
         path: '/detail',
         query:{
           id: this.goodItem.iid
         }
       })
+    }
+  },
+  computed: {
+    showImg() {
+      return this.goodItem.image || this.goodItem.show.img
     }
   }
 }

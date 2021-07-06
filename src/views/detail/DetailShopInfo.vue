@@ -9,20 +9,23 @@
       <div class="shop-run">
           <div class="shop-run-nums">
             <span>{{ goodsell }}万</span>
-            <span>{{ shop.goodCount }}</span>
+            <span>总销量</span>
           </div>
           <div class="shop-run-desc">
-            <span>总销量</span>
+            <span>{{ shop.goodCount }}</span>
             <span>全部宝贝</span>
           </div>
       </div>
       <div class="shop-comment">
         <div class="shop-comment-desc" v-for="(item, index) in shop.score" :key="index">
           <span>{{ item.name }}</span>
-          <span>{{ item.score.toFixed(2) }}</span>
+          <span :class="{isHigh: item.score >= 4.8, isNotHigh: item.score < 4.8}">{{ item.score.toFixed(2) }}</span>
           <span :class="{isBetter:item.isBetter, isNotBetter:!item.isBetter}">{{ item.isBetter ? '高' : '低' }}</span>
         </div>
       </div>
+    </div>
+    <div class="enter-shop">
+      <div>进店逛逛</div>
     </div>
   </div>
 </template>
@@ -84,45 +87,76 @@ export default {
   .shop-run{
     flex: 0.5;
     display: flex;
-    flex-direction: column;
     flex-wrap: wrap;
     border-right: 1px solid #cfcfcf8e;
+    align-items: center;
+    justify-content: center;
   }
   .shop-run-nums{
-    font-size: 18px;
-    font-weight: 520;
-    margin-bottom: 10px;
+    font-size: 14px;
     display: flex;
     justify-content: space-around;
     color: black;
+    display: flex;flex-direction: column;
+    align-items: center;
+    margin-right: 15px;
+  }
+  .shop-run-nums span{
+    padding-bottom: 8px;
   }
   .shop-run-desc{
     font-size: 14px;
     color: black;
     display: flex;
     justify-content: space-around;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .shop-run-desc span{
+    padding-bottom: 8px;
   }
   .shop-comment{
     flex: 0.5;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    margin-left: 10px;
+    margin-left: 15px;
     font-size: 14px;
     color: black;
   }
   .shop-comment-desc{
     margin-bottom: 12px;
+    text-align: center;
   }
   .shop-comment-desc span{
-    padding-right: 6px;    
+    padding-right: 8px;    
   }
   .isBetter{
-    background-color:red;
-    color: white;
+    color: red;
   }
   .isNotBetter{
-    background-color: green;
-    color: white;
+    color: green;
+  }
+  .isHigh{
+    color: red;
+  }
+  .isNotHigh{
+    color: green;
+  }
+  .enter-shop{
+    display: flex;
+    justify-content: center;
+  }
+  .enter-shop div{
+
+    text-align: center;
+    line-height: 24px;
+    width: 85px;
+    height: 24px;
+    background-color: #eee;
+    border-radius: 20px;
+    font-size: 14px;
+    margin-right: 10px;
   }
 </style>
