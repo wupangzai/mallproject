@@ -15,7 +15,8 @@ export default {
   props: {
     centerList: {
       type: Array,
-    }
+    },
+
   },
   data () {
     return {
@@ -25,6 +26,7 @@ export default {
   methods: {
     itemClick(index) {
       this.currentIndex = index
+      this.$emit('itemClick', index)
     }
   },
   components:{

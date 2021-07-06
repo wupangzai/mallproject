@@ -18,7 +18,7 @@
     <!-- 本周精选 -->
     <feature-view></feature-view>
     <!-- tabControl -->
-    <tab-control  :title="['流行', '新款', '精选']" @tabClick="tabClick" ref="tabControl2" v-show="!isFix"></tab-control>
+    <tab-control  :title="['流行', '新款', '精选']" @tabClick="tabClick" ref="tabControl2"></tab-control>
     <good-list :goods="goods[tabType].list"></good-list>
     </scroll>
     <back-top @click.native="backTop" v-show="backTopShow"></back-top>
@@ -35,7 +35,7 @@ import FeatureView from './childComponents/FeatureView.vue'
 import TabControl from '../../components/content/tabControl/TabControl.vue'
 import GoodList from '../../components/content/goods/GoodList.vue'
 import Scroll from '../../components/common/scroll/Scroll.vue'
-import BackTop from '../../components/content/backtop/BackTop.vue'
+// import BackTop from '../../components/content/backtop/BackTop.vue'
 
 // 公共方法类导入
 import {debounce} from '../../common/utils'
@@ -70,7 +70,7 @@ export default {
     TabControl,
     GoodList,
     Scroll,
-    BackTop,
+    // BackTop,
   },
 
   mixins: [backTop],
@@ -140,7 +140,7 @@ export default {
     },
     // 监听轮播图图片是否加载完成
     swiperimgload() {
-      this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop
+      this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop + 50
     },
 
     // 网络请求

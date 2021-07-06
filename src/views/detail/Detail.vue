@@ -7,10 +7,10 @@
           <img src="~@/assets/img/common/back.svg" class="back" @click="backClick">
       </template>
       <template v-slot:center>
-        <detail-nav-center :centerList="center"></detail-nav-center>
+        <detail-nav-center :centerList="center" @itemClick="navItemClick" ref="nav"></detail-nav-center>
       </template>
     </nav-bar>
-    <scroll class="content" ref="scroll">
+    <scroll class="content" ref="scroll" :probeType = '3' @scroll="scrollmove">
       <!-- 顶部轮播图展示 -->
       <detail-swiper :topImages="topImages"></detail-swiper>
       <!-- 基本信息展示 -->
@@ -20,13 +20,13 @@
       <!-- 商品详情信息 -->
       <detail-goods-info :detailInfo="detailInfo" @loadfinish="loadfinish"></detail-goods-info>
       <!-- 商品参数 -->
-      <detail-params :detailParams="goodsParams"></detail-params>
+      <detail-params :detailParams="goodsParams" ref="params"></detail-params>
       <!-- 用户评价 -->
-      <detail-comment :detailComment="comments"></detail-comment>
-      <good-list :goods="recommends"></good-list>
+      <detail-comment :detailComment="comments" ref="comments"></detail-comment>
+      <good-list :goods="recommends" ref="recommends"></good-list>
     </scroll>
     <!-- 回顶操作 -->
-    <back-top @click.native="backTop"></back-top>
+    <back-top @click.native="backTop" v-show="backTopShow"></back-top>
   </div>
 </template>
 
@@ -56,7 +56,7 @@ import
   getDetailData, getRecommendDate, Goods, Shop, GoodsParam, Comments
 }
 from '../../network/detail' 
-import BackTop from '../../components/content/backtop/BackTop.vue'
+// import BackTop from '../../components/content/backtop/BackTop.vue'
 
 
 export default {
@@ -78,7 +78,12 @@ export default {
       // 评论信息
       comments: {},
       // 推荐信息
-      recommends: []
+      recommends: [],
+      // 滚动位置显示按钮
+      backTopShow: false,
+      // 距离y
+      themeTopYs: [],
+
     }
   },
   components:{
@@ -93,7 +98,7 @@ export default {
     DetailComment,
     DetailRecommend,
     GoodList,
-    BackTop
+    // BackTop
   },
   methods:{
     // 返回上一级
@@ -103,6 +108,34 @@ export default {
     // 监听图片加载完成后刷新高度
     loadfinish() {
       this.$refs.scroll.refresh()
+      // 监听刷新完后赋值跳转高度
+      this.themeTopYs = []
+      this.themeTopYs.push(0)
+      this.themeTopYs.push(this.$refs.params.$el.offsetTop)
+      this.themeTopYs.push(this.$refs.comments.$el.offsetTop)
+      this.themeTopYs.push(this.$refs.recommends.$el.offsetTop)
+    },
+    // 监听滚动
+    scrollmove(position) {
+      if(-position.y >= 780){
+        this.backTopShow = true
+      }else{
+        this.backTopShow = false
+      }
+      for(let i = 0; i < this.themeTopYs.length; i++){
+        if(this.currentIndex !== i && (-position.y > this.themeTopYs[parseInt(i)]- 50 && -position.y< this.themeTopYs[parseInt(i + 1)]  -50)){
+          this.$refs.nav.currentIndex = i
+        }else if( -position.y > this.themeTopYs[this.themeTopYs.length - 1])
+          this.$refs.nav.currentIndex = 3
+      }
+      // this.themeTopYs.forEach((item, index) => {
+      //   if(-position.y > item && )
+      // });
+    },
+    // 顶部导航点击
+    navItemClick(index) {
+      // 导航点击跳转到对应位置
+      this.$refs.scroll.scrollTo(0, -this.themeTopYs[index], 200)
     },
 
     // 详情页请求网络数据方法封装
@@ -138,6 +171,7 @@ export default {
     this.$bus.$on('detailload', () => {
       refresh()
     })
+    
   }
 
 }
